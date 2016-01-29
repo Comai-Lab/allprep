@@ -1,3 +1,6 @@
+ # allprep
+  Tool for preprocessing and demultiplexing of sequencing data.
+
 Barcode Preparation Toolbox README
 
 DISCLAIMER:
