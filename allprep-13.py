@@ -61,6 +61,7 @@ parser.add_option("-I", "--indexreverse", dest="i2", default = False, help="Reve
 parser.add_option("-m", "--mismatch", dest="miss", action="store_true", default = False, help="Allow one base difference for indexed barcodes")
 parser.add_option("-E", "--error", dest="errfile", action="store_true", default = False, help="Create a rejected reads file.")
 parser.add_option("-n", "--allowN", dest="ncheck", action="store_true", default = False, help="Do not reject any sequence with'N' nucleotide automatically.")
+parser.add_option("-N", "--Ncut", dest="ntrim", action="store_true", default = False, help="Do Trim reads by N instead f rejecting them.")
 parser.add_option("-q", "--qualities", dest="qual", action="store_true", default = False, help="Convert Illumina 1.5 read qualities to sanger.")
 parser.add_option("-D", "--demultiplex", dest="demulti", action="store_true", default = False, help="ONLY Demultiplex, not trimming or checking at all")
 parser.add_option("-M", "--minseqlen", dest="minSeqLen", type = "int", default=35, help="Minimum sequence Length")
@@ -473,33 +474,34 @@ while 1:
                reverseseq = reverseseq[:x]+'\n'
                break
 
-
-      if opt.ncheck == False:
-         for x in range(len(forwardseq)):
-            if forwardseq[x] == 'N':
-               forwardqual = forwardqual[:x]+'\n'
-               forwardseq = forwardseq[:x]+'\n'
-               break
-         if opt.r != False:
-            for x in range(len(reverseseq)):
-               if reverseseq[x] == 'N':
-                  reversequal = reversequal[:x]+'\n'
-                  reverseseq = reverseseq[:x]+'\n'
-                  break      
-               
-#      check for 'N's in sequence
-#      if opt.ncheck == False:
-#         if 'N' in forwardseq:
-#            bad_flag = 1 
-#            error += "NinF"
-#         if opt.r != False:
-#            if 'N' in reverseseq:
-#               bad_flag = 1 
-#               error += "NinR"
-#         if bad_flag != 0:
-#            bad+=1
-#            error_out(read, error)
-#            continue
+      if opt.ntrim == True:
+         if opt.ncheck == False:
+            for x in range(len(forwardseq)):
+               if forwardseq[x] == 'N':
+                  forwardqual = forwardqual[:x]+'\n'
+                  forwardseq = forwardseq[:x]+'\n'
+                  break
+            if opt.r != False:
+               for x in range(len(reverseseq)):
+                  if reverseseq[x] == 'N':
+                     reversequal = reversequal[:x]+'\n'
+                     reverseseq = reverseseq[:x]+'\n'
+                     break      
+      elif opt.ntrim == False:         
+         #check for 'N's in sequence
+         if opt.ncheck == False:
+            if 'N' in forwardseq:
+               bad_flag = 1 
+               error += "NinF"
+            if opt.r != False:
+               if 'N' in reverseseq:
+                  bad_flag = 1 
+                  error += "NinR"
+            if bad_flag != 0:
+               bad+=1
+               error_out(read, error)
+               continue
+         
    
       #check that chopped length is not too small
       if len(forwardseq) < opt.minSeqLen+1 or len(forwardqual) < opt.minSeqLen+1:
