@@ -1,0 +1,7 @@
+LibName	Type	B1/I1	B2/I2	Overhang	Rembase
+sampleN1	0	AAAAA	T	.	.
+sampleN2	1	CCCCC	.	.	.
+sampleN3	2	CCCCCC	.	.	.
+sampleN4	3	CCCCCC	.	.	.
+sampleN5	4	GGGGGGGG	GGGGGGGG	.	.
+sampleN6	5	GGGGGGGG	GGGGGGGG	.	.

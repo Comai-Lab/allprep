@@ -7,8 +7,10 @@ from optparse import OptionParser
 from collections import defaultdict
 
 #Comai Lab, Ucdavis Genome Center
-#Meric Lieberman, 2013
-# This work is the property of UC Davis Genome Center - Comai Lab
+#Meric Lieberman, 2016
+#This work is the property of UC Davis Genome Center - Comai Lab
+#This is shared under a Creative Commons BY-NC-ND 4.0 license
+#https://creativecommons.org/licenses/by-nc-nd/4.0/
 
 # Use at your own risk. 
 # We cannot provide support.
