@@ -1,10 +1,10 @@
-# allprep
-Tool for preprocessing and demultiplexing of sequencing data.
 Barcode Preparation Toolbox README
 
 DISCLAIMER:
-Meric Lieberman, 2013
+Meric Lieberman, 2016
 This work is the property of UC Davis Genome Center - Comai Lab
+This is shared under a Creative Commons BY-NC-ND 4.0 license
+https://creativecommons.org/licenses/by-nc-nd/4.0/
 
 Use at your own risk. 
 We cannot provide support.
@@ -34,9 +34,10 @@ CONTENTS:
 
 This .tgz includes:
 
-allPrep-8.py - Single script to do all processing as detailed above.
+allPrep-13.py - Single script to do all processing as detailed above.
+README-barcode-file.txt - An explanation of the barcode file format
+sample-barcode-file.txt - An example barcode / index file
 
-no-demultiplex-allprep-8.py - Single script to all processing above, but does not demultiplex. For use on a directory of pre-demultiplexed files.
 
 interleaveSwitcher.py - This script will interleave two files or uninterleave a file. 
 	This is only applicable to paired-end reads. "Interleaved" means that the two 
@@ -44,7 +45,6 @@ interleaveSwitcher.py - This script will interleave two files or uninterleave a 
 	script for running directions.
 
 	
---------------------------------------------------------------------------
 --------------------------------------------------------------------------	
 	
 SCRIPT DETAILS:
@@ -53,14 +53,14 @@ after disclaimer and library import.
 
 --------------------------------------------------------------------------
 
-allprep-8.py
+allprep-13.py
 
 Usage: 
 For all modes the run command looks like this, with [...] indicating files needed by specific read type, and {....} indication optional parameters
-allprep-8.py -b barcode-file.txt -f forward-read-file.fq [-r reverse-read-file.fq] [-i index1-file.fq] [-I index2-file.fq] {-m} {-E} {-n} {-q} {-d}
+allprep-13.py -b barcode-file.txt -f forward-read-file.fq [-r reverse-read-file.fq] [-i index1-file.fq] [-I index2-file.fq] {-m} {-E} {-n} {-q} {-d}
 
 For a quick view of parameters form the command line, simply use the -h for help.
-allprep-8.py -h
+allprep-13.py -h
 
 This program that takes a barcode file and splits the lane sequence.txt files into specified
 library.txt (lib#.txt) files, does barcode check and match, 'N' filtering, primary and
@@ -75,8 +75,10 @@ There are also five additional operating options:
 -m for mismatch mode, this allows a 1 bp mismatch between the index / barcode and the best matching barcode. 
 -E for error reads mode, outputs the rejected reads to a file
 -n for N allowed mode, this turns off the check that rejects a read if there are any 'N' nucleotides in the sequence
+-N for N reads, trim at the N instead of rejecting outrihgt NOTE: THIS DRAMATICALLY EXTENDS RUNTIME
 -q to convert a file using Illumina 1.5 qualities to Sanger/Illumina1.8 (standard)
 -D for only demultiplexing mode, this only splits the reads by barcode and does no additional trimming or checks
+-M use this to change the defualt minimum read length post filtering 
 
 This program can take a file with most combinations of barcode/indexing. The possibilities are:
 1. single ended, barcoded
@@ -90,64 +92,29 @@ Please see the README-barcode-file.txt and sample-barcode-file.txt for help in c
 
 --------------------------------------------------------------------------
 
-no-demultiplex-allprep-8.py <optional parameters>
-
-
-For a quick view of parameters from the command line, simply use the -h for help.
-no-demultiplex-allprep-8.py -h
-
-This program that looks at all .fastq or .fq files in the current working directory (lib#.fq)
- files, does optional combinations of: 'N' filtering, primary and
-secondary adapter contamination, quality conversion, quality trimming (mean quality of 20 over 5 base window),
-length trimming (default 35)
-
-Input:
-This script works on a directory of fastq files, the files must end with a common fastq file extension
-For each file, depending on the parameters will process a predemultiplexed read file
-
-Default Behavior
-Rejected reads not output
-'N' nuecleotide reads removed
-Adapter contamination trimmed out
-Qualtites are Phred+33 (samger or illumina 1.8+)
-minimum trimmed sequence length is 35
-single ended reads
-prefix for copy of file that have been changed will be "prepped"
-
-The options to change behavior
--E, output rejected reads per file
--n, allow reads with 'N' nuecleotides
--a, do not trim out adapter conamination
--q, convert form phred+64 (illumina 1.5-1.7) to phred+33(samger, 1.8+)
--M <n>, change minimum sequence length to integer <n>
--p, ALL input libs are pair ended. PE filss must be pre-interleaved
--o, a prefix to apply to the new processed file of reads, this work will be put on the front of all of the result files
-
-
---------------------------------------------------------------------------
-
 interleaveSwitcher.py
 
-Usage: programName.py i forwardFile.fq reverseFile.fq outFileName.fq
+Usage: programName.py -f forwardFile.fq -r reverseFile.fq -o outFileName.fq
        ______OR_______
-Usage: programName.py u interleavedFile
+Usage: programName.py -f interleavedFile
 
-This program has two operating modes, defined by the first command line parameter.
+This program has two operating modes, defined by hoiw many files are provided.
 
-Interleave mode, first parameter an 'i' or an 'I'.
+Interleave mode, two files are given.
    This will take two read files of equal length and interleave them.
 Input Parameters:
 forwardFile.fq = original file input, Sanger or illumina file forward side
 reverseFile = original file input, Sanger or illumina reverse side
 outFileName.fq = interleaved output file name/location
 
-Uninterleave mode, first parameter an 'u' or an 'U'.
+Uninterleave mode, only one input file given.
    This will take one interleaved paired read file and split them into two paired read files.
    The -1.fq and -2.fq result files will be forward and backward respectively.
+   
 Input Parameters:
 interleavedFile.fq = original file input, Sanger or illumina interleaved paired reads
 
-Be sure to put the i/u as the first parameter!
+use interleaveSwitcher.py -h to see help for command line parameters
 
 --------------------------------------------------------------------------
 
