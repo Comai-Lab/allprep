@@ -35,7 +35,7 @@ Please note that:
 
 CONTENTS:
 
-This .tgz includes:
+This .zip includes:
 
 allPrep-13.py - Single script to do all processing as detailed above.
 README-barcode-file.txt - An explanation of the barcode file format
