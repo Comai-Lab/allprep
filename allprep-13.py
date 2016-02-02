@@ -374,11 +374,11 @@ while 1:
       nameflag = 1
 
    if mtype == 'old':
-      forwardname = read[0][0][:-1]+poss+'\n'
+      forwardname = read[0][0][:-1]+'#'+poss+'\n'
       forwardseq = read[0][1][len(poss)+len(overhangs[poss]):]
       forwardqual = read[0][3][len(poss)+len(overhangs[poss]):]
       if opt.r != False:
-         reversename = read[1][0][:-1]+poss+'\n'
+         reversename = read[1][0][:-1]+'#'+poss+'\n'
          reverseseq = read[1][1][len(poss)+len(overhangs[poss]):]
          reversequal = read[1][3][len(poss)+len(overhangs[poss]):]
    elif mtype == 'sindex1' or mtype == 'pindex1':
